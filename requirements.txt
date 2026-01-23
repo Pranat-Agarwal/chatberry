@@ -1,0 +1,40 @@
+# -------------------------------
+# Web framework & server
+# -------------------------------
+fastapi            # API framework
+uvicorn            # ASGI server to run FastAPI
+
+# -------------------------------
+# LLM Provider
+# -------------------------------
+groq               # Groq Python SDK (LLM text generation)
+
+# -------------------------------
+# Environment variables
+# -------------------------------
+python-dotenv      # Load .env (Groq API key)
+
+# -------------------------------
+# Speech-to-Text (Voice Input)
+# -------------------------------
+SpeechRecognition  # Converts browser-recorded audio to text (Google STT free tier)
+
+# -------------------------------
+# Text-to-Speech (Voice Output)
+# -------------------------------
+gTTS               # Converts text response to MP3 audio
+
+# -------------------------------
+# Image handling
+# -------------------------------
+Pillow             # Image processing (OCR input + image output)
+
+# -------------------------------
+# OCR (Image → Text)
+# -------------------------------
+pytesseract        # OCR engine (requires system Tesseract)
+
+# -------------------------------
+# File upload support
+# -------------------------------
+PyPDF2             # Extract text from PDF files
