@@ -19,7 +19,9 @@ app = FastAPI()
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
 # Create DB tables
-Base.metadata.create_all(bind=engine)
+if engine:
+    Base.metadata.create_all(bind=engine)
+
 
 # Routers
 app.include_router(auth_router, prefix="/api/v1/auth")
@@ -27,7 +29,9 @@ app.include_router(chat_router, prefix="/api/v1")
 
 @app.on_event("startup")
 def startup():
-    start_cleanup()
+    if engine:
+        start_cleanup()
+
 
 @app.get("/health")
 def health():
