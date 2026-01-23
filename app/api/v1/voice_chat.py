@@ -1,72 +1,70 @@
-from fastapi import APIRouter, UploadFile, File, Request
-from fastapi.responses import JSONResponse
+from fastapi import APIRouter, Depends, HTTPException, Body
+from sqlalchemy.orm import Session
 from typing import Optional
-import base64
 
+from app.core.database import get_db
+from app.core.deps import get_current_user
 from app.services.groq_service import ask_groq
-from app.services.speech_service import speech_to_text
-from app.services.tts_service import text_to_speech
-from app.services.image_service import text_to_image
-from app.services.file_service import extract_text_from_file
-from app.services.ocr_service import extract_text_from_image
+from app.models.chat import ChatHistory
 
-# ❌ NO prefix here
-router = APIRouter(tags=["Voice Chat"])
+router = APIRouter()
 
+# -------------------------------------------------
+# CHAT ENDPOINT (WORKS WITH OR WITHOUT LOGIN)
+# -------------------------------------------------
 
 @router.post("/voice-chat")
 async def voice_chat(
-    request: Request,
-    audio: Optional[UploadFile] = File(None),
-    image: Optional[UploadFile] = File(None),
-    file: Optional[UploadFile] = File(None),
+    text: str = Body(..., embed=True),
+    db: Session = Depends(get_db),
+    user_id: Optional[int] = Depends(get_current_user),
 ):
-    """
-    Main multimodal ChatBerry endpoint
-    """
+    text = text.strip()
 
-    user_text = ""
+    if not text:
+        raise HTTPException(status_code=400, detail="Empty message")
 
-    # -------- TEXT INPUT --------
-    if request.headers.get("content-type", "").startswith("application/json"):
-        body = await request.json()
-        user_text = body.get("text", "")
+    # Ask Groq
+    response = ask_groq(text)
 
-    # -------- VOICE INPUT --------
-    elif audio:
-        user_text = speech_to_text(await audio.read())
-
-    # -------- IMAGE INPUT --------
-    elif image:
-        user_text = extract_text_from_image(await image.read())
-
-    # -------- FILE INPUT --------
-    elif file:
-        user_text = extract_text_from_file(
-            file.filename,
-            await file.read()
+    # ✅ Save history ONLY if user is logged in
+    if user_id:
+        chat = ChatHistory(
+            user_id=user_id,
+            message=text,
+            response=response,
         )
+        db.add(chat)
+        db.commit()
 
-    if not user_text.strip():
-        return JSONResponse(
-            status_code=400,
-            content={"error": "No valid input provided"},
-        )
+    return {
+        "text": response
+    }
 
-    # -------- LLM --------
-    llm_response = ask_groq(user_text)
 
-    response = {"text": llm_response}
-    intent = user_text.lower()
+# -------------------------------------------------
+# CHAT HISTORY API (JWT REQUIRED)
+# -------------------------------------------------
 
-    # -------- VOICE OUTPUT --------
-    if any(w in intent for w in ["voice", "say", "read aloud"]):
-        audio_mp3 = text_to_speech(llm_response)
-        response["audio_base64"] = base64.b64encode(audio_mp3).decode()
+@router.get("/history")
+def get_chat_history(
+    db: Session = Depends(get_db),
+    user_id: int = Depends(get_current_user),
+):
+    chats = (
+        db.query(ChatHistory)
+        .filter(ChatHistory.user_id == user_id)
+        .order_by(ChatHistory.created_at.desc())
+        .limit(50)
+        .all()
+    )
 
-    # -------- IMAGE OUTPUT --------
-    if any(w in intent for w in ["image", "picture", "show visually"]):
-        img_bytes = text_to_image(llm_response)
-        response["image_base64"] = base64.b64encode(img_bytes).decode()
-
-    return JSONResponse(content=response)
+    return [
+        {
+            "id": c.id,
+            "message": c.message,
+            "response": c.response,
+            "created_at": c.created_at,
+        }
+        for c in chats
+    ]

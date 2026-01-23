@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Login - ChatBerry</title>
+<style>
+body {
+  background:#0f172a;
+  color:white;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  font-family:Segoe UI;
+}
+.box {
+  background:#020617;
+  padding:30px;
+  border-radius:10px;
+  width:300px;
+}
+input,button {
+  width:100%;
+  padding:10px;
+  margin-top:10px;
+}
+button {
+  background:#2563eb;
+  color:white;
+  border:none;
+}
+a { color:#60a5fa; }
+</style>
+</head>
+<body>
+
+<div class="box">
+  <h2>Login</h2>
+  <input id="email" placeholder="Email">
+  <input id="password" type="password" placeholder="Password">
+  <button onclick="login()">Login</button>
+  <p>New user? <a href="/static/signup.html">Signup</a></p>
+</div>
+
+<script>
+function login() {
+  const email = document.getElementById("email").value;
+  if (!email) return alert("Enter email");
+
+  localStorage.setItem("chatberry_user", email);
+  window.location.href = "/static/ui.html";
+}
+</script>
+
+</body>
+</html>

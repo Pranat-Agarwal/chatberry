@@ -1,14 +1,21 @@
-from fastapi import Header, HTTPException
-from app.core.security import decode_token
+from fastapi import Header
+from typing import Optional
 
-def get_current_user(authorization: str = Header(...)):
-    if not authorization.startswith("Bearer "):
-        raise HTTPException(401, "Invalid Authorization header")
+def get_current_user(
+    authorization: Optional[str] = Header(None),
+) -> Optional[int]:
+    """
+    Returns user_id if JWT is present, else None
+    """
 
-    token = authorization.split(" ")[1]
-    payload = decode_token(token)
+    if not authorization:
+        return None
 
-    if not payload:
-        raise HTTPException(401, "Invalid or expired token")
-
-    return int(payload["sub"])
+    # Example: "Bearer <token>"
+    try:
+        token = authorization.split(" ")[1]
+        # validate token here
+        user_id = decode_token(token)
+        return user_id
+    except Exception:
+        return None

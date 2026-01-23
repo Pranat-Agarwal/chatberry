@@ -115,9 +115,9 @@ input[type="text"] {
 <body>
 
 <header>
-  <div class="header-btn">👤 Account</div>
+  <div class="header-btn" onclick="logout()">👤 Account</div>
   <h1>CHATBERRY</h1>
-  <div class="header-btn">🕘 History</div>
+  <div class="header-btn" onclick="window.location.href='/static/history.html'">🕘 History</div>
 </header>
 
 <div id="chat"></div>
@@ -136,7 +136,13 @@ input[type="text"] {
   </div>
 </footer>
 
+<!-- 🔐 Auth + History logic -->
+<script src="/static/auth.js"></script>
+
 <script>
+// 🔒 Require login
+requireLogin();
+
 const chat = document.getElementById("chat");
 const textInput = document.getElementById("textInput");
 const fileInput = document.getElementById("fileInput");
@@ -144,7 +150,9 @@ const imageInput = document.getElementById("imageInput");
 
 let mediaRecorder;
 let audioChunks = [];
+let lastUserMessage = "";
 
+// ---------- CHAT UI ----------
 function addMessage(text, type) {
   const div = document.createElement("div");
   div.className = `message ${type}`;
@@ -156,7 +164,10 @@ function addMessage(text, type) {
 /* ---------- TEXT ---------- */
 async function sendText() {
   if (!textInput.value.trim()) return;
+
   const text = textInput.value;
+  lastUserMessage = text;
+
   addMessage(text, "user");
   textInput.value = "";
 
@@ -184,7 +195,8 @@ async function startRecording() {
     const form = new FormData();
     form.append("audio", blob);
 
-    addMessage("🎤 Voice message", "user");
+    lastUserMessage = "🎤 Voice message";
+    addMessage(lastUserMessage, "user");
 
     const res = await fetch("/api/v1/voice-chat", {
       method: "POST",
@@ -201,10 +213,13 @@ async function startRecording() {
 /* ---------- FILE ---------- */
 fileInput.onchange = async () => {
   const file = fileInput.files[0];
+  if (!file) return;
+
+  lastUserMessage = `📄 ${file.name}`;
+  addMessage(lastUserMessage, "user");
+
   const form = new FormData();
   form.append("file", file);
-
-  addMessage(`📄 ${file.name}`, "user");
 
   const res = await fetch("/api/v1/voice-chat", {
     method: "POST",
@@ -218,10 +233,13 @@ fileInput.onchange = async () => {
 /* ---------- IMAGE ---------- */
 imageInput.onchange = async () => {
   const file = imageInput.files[0];
+  if (!file) return;
+
+  lastUserMessage = "🖼 Image uploaded";
+  addMessage(lastUserMessage, "user");
+
   const form = new FormData();
   form.append("image", file);
-
-  addMessage(`🖼 Image uploaded`, "user");
 
   const res = await fetch("/api/v1/voice-chat", {
     method: "POST",
@@ -234,7 +252,10 @@ imageInput.onchange = async () => {
 
 /* ---------- RESPONSE ---------- */
 function handleResponse(data) {
-  if (data.text) addMessage(data.text, "ai");
+  if (data.text) {
+    addMessage(data.text, "ai");
+    saveToHistory(lastUserMessage, data.text);
+  }
 
   if (data.audio_base64) {
     const audio = new Audio("data:audio/mp3;base64," + data.audio_base64);
@@ -246,6 +267,7 @@ function handleResponse(data) {
     img.src = "data:image/png;base64," + data.image_base64;
     img.style.maxWidth = "300px";
     img.style.display = "block";
+    img.style.marginTop = "10px";
     chat.appendChild(img);
   }
 }
