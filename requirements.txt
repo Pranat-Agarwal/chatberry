@@ -12,7 +12,20 @@ groq                 # Groq Python SDK (LLM text generation)
 # -------------------------------
 # Environment variables
 # -------------------------------
-python-dotenv        # Load .env (Groq API key)
+python-dotenv        # Load .env locally (NOT used in production)
+
+# -------------------------------
+# Authentication & Security
+# -------------------------------
+sqlalchemy           # ORM for PostgreSQL
+psycopg2-binary      # PostgreSQL driver
+passlib[bcrypt]      # Secure password hashing
+python-jose[cryptography]  # JWT creation & verification
+
+# -------------------------------
+# Background jobs / cleanup
+# -------------------------------
+apscheduler          # Scheduled cleanup (chat history TTL)
 
 # -------------------------------
 # Speech-to-Text (Voice Input)

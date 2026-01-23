@@ -1,0 +1,18 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:15
+    container_name: chatberry_db
+    restart: always
+    environment:
+      POSTGRES_USER: chatberry
+      POSTGRES_PASSWORD: chatberry_pass
+      POSTGRES_DB: chatberry
+    ports:
+      - "5432:5432"
+    volumes:
+      - chatberry_pg:/var/lib/postgresql/data
+
+volumes:
+  chatberry_pg:
