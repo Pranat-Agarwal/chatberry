@@ -1,71 +1,33 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>History - ChatBerry</title>
-<style>
-body {
-  background:#0f172a;
-  color:white;
-  font-family:Segoe UI;
-  padding:20px;
-}
-
-h2 {
-  margin-bottom: 20px;
-}
-
-.card {
-  background:#020617;
-  padding:15px;
-  margin-bottom:15px;
-  border-radius:8px;
-  border: 1px solid #1e293b;
-}
-
-.time {
-  font-size: 12px;
-  opacity: 0.6;
-  margin-top: 8px;
-}
-</style>
-</head>
-<body>
-
-<h2>Your Chat History</h2>
-<div id="history"></div>
-
-<script src="/static/auth.js"></script>
 <script>
-requireLogin();
-
-const container = document.getElementById("history");
+const token = localStorage.getItem("access_token");
 
 async function loadHistory() {
   const res = await fetch("/api/v1/history", {
     headers: {
-      ...getAuthHeaders()
+      "Authorization": `Bearer ${token}`
     }
   });
 
   if (!res.ok) {
-    container.innerHTML = "<p>Failed to load history</p>";
+    document.getElementById("history").innerText = "Failed to load history";
     return;
   }
 
-  const history = await res.json();
+  const data = await res.json();
+  const container = document.getElementById("history");
+  container.innerHTML = "";
 
-  if (history.length === 0) {
-    container.innerHTML = "<p>No chat history yet.</p>";
+  if (data.length === 0) {
+    container.innerText = "No chat history yet";
     return;
   }
 
-  history.forEach(h => {
+  data.forEach(chat => {
     const div = document.createElement("div");
     div.className = "card";
     div.innerHTML = `
-      <b>You:</b><br>${h.message}<br><br>
-      <b>ChatBerry:</b><br>${h.response}
-      <div class="time">${new Date(h.created_at).toLocaleString()}</div>
+      <b>You:</b> ${chat.message}<br><br>
+      <b>ChatBerry:</b> ${chat.response}
     `;
     container.appendChild(div);
   });
@@ -73,6 +35,3 @@ async function loadHistory() {
 
 loadHistory();
 </script>
-
-</body>
-</html>

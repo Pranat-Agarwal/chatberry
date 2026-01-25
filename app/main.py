@@ -8,7 +8,7 @@ from fastapi.staticfiles import StaticFiles
 from app.models.user import User
 from app.models.chat import ChatHistory
 
-from app.api.v1.voice_chat import router as chat_router
+from app.api.v1.chat import router as chat_router
 from app.api.v1.auth import router as auth_router
 from app.services.cleanup_service import start_cleanup
 from app.core.database import Base, engine

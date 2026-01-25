@@ -16,7 +16,7 @@ body {
   background:#020617;
   padding:30px;
   border-radius:10px;
-  width:300px;
+  width:320px;
 }
 input,button {
   width:100%;
@@ -27,9 +27,11 @@ button {
   background:#2563eb;
   color:white;
   border:none;
+  cursor:pointer;
 }
 </style>
 </head>
+
 <body>
 
 <div class="box">
@@ -47,14 +49,20 @@ async function signup() {
   const password = document.getElementById("password").value.trim();
 
   if (!username || !email || !password) {
-    alert("Fill all fields");
+    alert("All fields are required");
     return;
   }
 
   const res = await fetch("/api/v1/auth/signup", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username, email, password })
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      username: username,
+      email: email,
+      password: password
+    })
   });
 
   const data = await res.json();
@@ -64,9 +72,11 @@ async function signup() {
     return;
   }
 
+  // ✅ VERY IMPORTANT (AUTO LOGIN)
   localStorage.setItem("access_token", data.access_token);
   localStorage.setItem("username", data.username);
 
+  // ✅ REDIRECT TO MAIN CHAT UI
   window.location.href = "/static/ui.html";
 }
 </script>
