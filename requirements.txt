@@ -1,54 +1,56 @@
 # -------------------------------
 # Web framework & server
 # -------------------------------
-fastapi              # API framework
-uvicorn              # ASGI server to run FastAPI
+fastapi
+uvicorn
 
 # -------------------------------
 # LLM Provider
 # -------------------------------
-groq                 # Groq Python SDK (LLM text generation)
+groq
 
 # -------------------------------
 # Environment variables
 # -------------------------------
-python-dotenv        # Load .env locally (NOT used in production)
+python-dotenv
 
 # -------------------------------
 # Authentication & Security
 # -------------------------------
-sqlalchemy           # ORM for PostgreSQL
-psycopg2-binary      # PostgreSQL driver
-passlib[bcrypt]      # Secure password hashing
-python-jose[cryptography]  # JWT creation & verification
+sqlalchemy
+psycopg2-binary
+passlib[bcrypt]
+bcrypt==4.1.2
+python-jose[cryptography]
+email-validator
 
 # -------------------------------
 # Background jobs / cleanup
 # -------------------------------
-apscheduler          # Scheduled cleanup (chat history TTL)
+apscheduler
 
 # -------------------------------
 # Speech-to-Text (Voice Input)
 # -------------------------------
-SpeechRecognition    # Converts browser-recorded audio to text (Google STT free tier)
+SpeechRecognition
 
 # -------------------------------
 # Text-to-Speech (Voice Output)
 # -------------------------------
-gTTS                 # Converts text response to MP3 audio
+gTTS
 
 # -------------------------------
 # Image handling
 # -------------------------------
-Pillow               # Image processing (OCR input + image output)
+Pillow
 
 # -------------------------------
 # OCR (Image → Text)
 # -------------------------------
-pytesseract          # OCR engine (requires system Tesseract)
+pytesseract
 
 # -------------------------------
 # File upload support
 # -------------------------------
-PyPDF2               # Extract text from PDF files
-python-multipart     # REQUIRED for FastAPI UploadFile / multipart form data
+PyPDF2
+python-multipart

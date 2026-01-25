@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Body
+from fastapi import APIRouter, Depends, Request, HTTPException
 from sqlalchemy.orm import Session
 from typing import Optional
 
@@ -15,26 +15,29 @@ router = APIRouter()
 
 @router.post("/voice-chat")
 async def voice_chat(
-    text: str = Body(..., embed=True),
+    request: Request,
     db: Session = Depends(get_db),
     user_id: Optional[int] = Depends(get_current_user),
 ):
-    text = text.strip()
+    body = await request.json()
+    text = body.get("text", "").strip()
 
     if not text:
         raise HTTPException(status_code=400, detail="Empty message")
 
     # Ask Groq
-    response = ask_groq(text)
+    try:
+        response = ask_groq(text)
+    except Exception:
+        raise HTTPException(status_code=500, detail="AI service error")
 
     # ✅ Save history ONLY if user is logged in
-    if user_id:
-        chat = ChatHistory(
+    if user_id is not None:
+        db.add(ChatHistory(
             user_id=user_id,
             message=text,
             response=response,
-        )
-        db.add(chat)
+        ))
         db.commit()
 
     return {
@@ -49,8 +52,11 @@ async def voice_chat(
 @router.get("/history")
 def get_chat_history(
     db: Session = Depends(get_db),
-    user_id: int = Depends(get_current_user),
+    user_id: Optional[int] = Depends(get_current_user),
 ):
+    if user_id is None:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+
     chats = (
         db.query(ChatHistory)
         .filter(ChatHistory.user_id == user_id)

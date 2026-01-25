@@ -34,17 +34,39 @@ button {
 
 <div class="box">
   <h2>Signup</h2>
+  <input id="username" placeholder="Username">
   <input id="email" placeholder="Email">
   <input id="password" type="password" placeholder="Password">
   <button onclick="signup()">Create Account</button>
 </div>
 
 <script>
-function signup() {
-  const email = document.getElementById("email").value;
-  if (!email) return alert("Enter email");
+async function signup() {
+  const username = document.getElementById("username").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
 
-  localStorage.setItem("chatberry_user", email);
+  if (!username || !email || !password) {
+    alert("Fill all fields");
+    return;
+  }
+
+  const res = await fetch("/api/v1/auth/signup", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username, email, password })
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    alert(data.detail || "Signup failed");
+    return;
+  }
+
+  localStorage.setItem("access_token", data.access_token);
+  localStorage.setItem("username", data.username);
+
   window.location.href = "/static/ui.html";
 }
 </script>

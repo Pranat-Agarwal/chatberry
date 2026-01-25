@@ -42,11 +42,31 @@ a { color:#60a5fa; }
 </div>
 
 <script>
-function login() {
-  const email = document.getElementById("email").value;
-  if (!email) return alert("Enter email");
+async function login() {
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
 
-  localStorage.setItem("chatberry_user", email);
+  if (!email || !password) {
+    alert("Enter email and password");
+    return;
+  }
+
+  const res = await fetch("/api/v1/auth/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, password })
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    alert(data.detail || "Login failed");
+    return;
+  }
+
+  localStorage.setItem("access_token", data.access_token);
+  localStorage.setItem("username", data.username);
+
   window.location.href = "/static/ui.html";
 }
 </script>

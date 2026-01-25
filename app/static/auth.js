@@ -1,30 +1,33 @@
-// ---------- AUTH ----------
+// ---------- AUTH (JWT BASED) ----------
+
+// Check if user is logged in (JWT exists)
 function isLoggedIn() {
-  return !!localStorage.getItem("chatberry_user");
+  return !!localStorage.getItem("access_token");
 }
 
+// Redirect to login page if not logged in
 function requireLogin() {
   if (!isLoggedIn()) {
     window.location.href = "/static/login.html";
   }
 }
 
+// Logout user
 function logout() {
-  localStorage.removeItem("chatberry_user");
+  localStorage.removeItem("access_token");
+  localStorage.removeItem("username");
   window.location.href = "/static/login.html";
 }
 
-// ---------- HISTORY ----------
-function saveToHistory(userMsg, aiMsg) {
-  const history = JSON.parse(localStorage.getItem("chatberry_history") || "[]");
-  history.push({
-    time: new Date().toISOString(),
-    user: userMsg,
-    ai: aiMsg
-  });
-  localStorage.setItem("chatberry_history", JSON.stringify(history));
+// Get auth header for API calls
+function getAuthHeaders() {
+  const token = localStorage.getItem("access_token");
+  return token
+    ? { Authorization: `Bearer ${token}` }
+    : {};
 }
 
-function getHistory() {
-  return JSON.parse(localStorage.getItem("chatberry_history") || "[]");
-}
+// ---------- HISTORY (BACKEND ONLY) ----------
+// ❌ Local history is NOT used anymore
+// ❌ saveToHistory() REMOVED
+// ❌ getHistory() REMOVED

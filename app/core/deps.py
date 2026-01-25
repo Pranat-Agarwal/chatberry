@@ -1,21 +1,30 @@
 from fastapi import Header
 from typing import Optional
 
+from app.core.security import decode_token
+
+
 def get_current_user(
     authorization: Optional[str] = Header(None),
 ) -> Optional[int]:
     """
-    Returns user_id if JWT is present, else None
+    Returns user_id if JWT is valid, else None
     """
 
     if not authorization:
         return None
 
-    # Example: "Bearer <token>"
+    # Expected format: "Bearer <token>"
     try:
-        token = authorization.split(" ")[1]
-        # validate token here
-        user_id = decode_token(token)
-        return user_id
+        scheme, token = authorization.split(" ")
+        if scheme.lower() != "bearer":
+            return None
+
+        payload = decode_token(token)
+        if not payload:
+            return None
+
+        return int(payload.get("sub"))
+
     except Exception:
         return None
