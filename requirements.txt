@@ -1,0 +1,14 @@
+flask
+gunicorn
+pymongo
+python-dotenv
+requests
+bcrypt
+PyJWT
+groq
+pytesseract
+pillow
+gtts
+pyttsx3
+secure-smtplib
+google-auth
