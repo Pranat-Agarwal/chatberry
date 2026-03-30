@@ -39,6 +39,15 @@ function handleUserClick() {
 // ==========================
 async function handleCredentialResponse(response) {
     try {
+        // 🔥 Decode Google token (fallback safety)
+        const base64Url = response.credential.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const decoded = JSON.parse(atob(base64));
+
+        console.log("Google Data:", decoded);
+
+        const googleName = decoded.name;
+
         const res = await fetch("/auth/google", {
             method: "POST",
             headers: {
@@ -51,23 +60,37 @@ async function handleCredentialResponse(response) {
 
         const data = await res.json();
 
+        console.log("Backend Data:", data);
+
         if (data.token) {
             localStorage.setItem("token", data.token);
 
+            // ✅ FIX: always ensure name is set
+            let name = null;
+
             if (data.user && data.user.name) {
-                localStorage.setItem("user_name", data.user.name);
+                name = data.user.name;
+            } else if (googleName) {
+                name = googleName;
             }
 
-            updateUserUI(); // 🔥 update name
+            if (name) {
+                localStorage.setItem("user_name", name);
+            }
+
+            updateUserUI();
+
+            // 🔥 force UI refresh
+            setTimeout(updateUserUI, 100);
+
         } else {
             alert("Login failed");
         }
 
     } catch (err) {
-        console.error(err);
+        console.error("Login Error:", err);
     }
 }
-
 // ==========================
 // 🔵 GOOGLE LOGIN BUTTON
 // ==========================
