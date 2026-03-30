@@ -26,7 +26,7 @@ from routes.speech_routes import speech_bp
 from config.database import init_db
 
 
-def create_app():
+def chatberry():
     app = Flask(__name__)
 
     # ==========================
@@ -94,7 +94,7 @@ def create_app():
 # ▶️ RUN SERVER
 # ==========================
 if __name__ == "__main__":
-    app = create_app()
+    app = chatberry()
 
     port = int(os.getenv("PORT", 5000))
 
