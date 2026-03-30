@@ -22,40 +22,45 @@
 
 <div class="main">
 
-    <!-- ==========================
-         🔝 TOP BAR
-    ========================== -->
+    <!-- ========================== -->
+    <!-- 🔝 TOP BAR (FIXED) -->
+    <!-- ========================== -->
     <div class="top-bar">
 
-        <button id="normal-btn" class="mode-btn active" onclick="setMode('normal')">
-            🔎 Normal
-        </button>
+        <div class="mode-group">
+            <button id="normal-btn" class="mode-btn active" onclick="setMode('normal')">
+                🔎 Normal
+            </button>
 
-        <button id="deep-btn" class="mode-btn" onclick="setMode('deep')">
-            🧠 Deep
-        </button>
+            <button id="deep-btn" class="mode-btn" onclick="setMode('deep')">
+                🧠 Deep
+            </button>
+        </div>
 
-        <!-- 👤 USER BUTTON -->
-        <button id="user-info" onclick="handleUserClick()" 
-                style="margin-left:auto; padding:6px 12px; cursor:pointer;">
-            Login
-        </button>
-        <div id="google-btn" style="display:none;"></div>
+        <!-- 👤 USER -->
+        <div class="user-section">
+            <button id="user-info" onclick="handleUserClick()">
+                Login
+            </button>
+        </div>
 
     </div>
 
     <!-- 💬 CHAT BOX -->
     <div id="chat-box" class="chat-box"></div>
 
-    <!-- ✍️ INPUT AREA -->
+    <!-- ========================== -->
+    <!-- ✍️ INPUT AREA (FIXED) -->
+    <!-- ========================== -->
     <div class="input-area">
 
         <input type="file" id="fileInput" hidden />
+
         <button class="icon-btn" onclick="document.getElementById('fileInput').click()">📁</button>
 
         <input type="text" id="message" placeholder="Type your message..." />
 
-        <button id="speaker-btn" onclick="toggleSpeaker()">🔇</button>
+        <button id="speaker-btn" class="icon-btn" onclick="toggleSpeaker()">🔇</button>
 
         <button class="send-btn" onclick="sendMessage()">➤</button>
 

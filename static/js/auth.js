@@ -23,15 +23,41 @@ function handleUserClick() {
     const token = localStorage.getItem("token");
 
     if (!window.google) {
-        alert("Google not loaded yet, refresh once");
+        alert("Google not loaded");
         return;
     }
 
     if (!token) {
+        // 🔓 Not logged in → login
         google.accounts.id.prompt();
     } else {
-        google.accounts.id.prompt(); // switch account
+        // 🔐 Logged in → logout + switch
+        logoutAndSwitch();
     }
+}
+
+function logoutAndSwitch() {
+    console.log("Logging out...");
+
+    // 🔥 Clear local storage
+    localStorage.removeItem("token");
+    localStorage.removeItem("user_name");
+
+    // 🔥 Reset Google session
+    google.accounts.id.disableAutoSelect();
+
+    // (optional but strong logout)
+    google.accounts.id.revoke("", () => {
+        console.log("Google session revoked");
+    });
+
+    // 🔥 Update UI
+    updateUserUI();
+
+    // 🔥 Open account chooser again
+    setTimeout(() => {
+        google.accounts.id.prompt();
+    }, 300);
 }
 
 // ==========================
