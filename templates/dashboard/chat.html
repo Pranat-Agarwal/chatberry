@@ -8,69 +8,69 @@
 
 <div class="app">
 
-    <!-- Sidebar -->
+    <!-- ===== SIDEBAR ===== -->
     <div class="sidebar">
-        <button onclick="newChat()">+ New Chat</button>
+
+        <button class="new-chat-btn" onclick="newChat()">+ New Chat</button>
 
         <div class="history" id="history"></div>
 
-        <div class="sidebar-actions">
-            <button onclick="deleteLast()">Delete Last</button>
-            <button onclick="deleteAll()">Delete All</button>
-        </div>
-    </div>
-
-<div class="main">
-
-    <!-- ========================== -->
-    <!-- 🔝 TOP BAR (FIXED) -->
-    <!-- ========================== -->
-    <div class="top-bar">
-
-        <div class="mode-group">
-            <button id="normal-btn" class="mode-btn active" onclick="setMode('normal')">
-                🔎 Normal
-            </button>
-
-            <button id="deep-btn" class="mode-btn" onclick="setMode('deep')">
-                🧠 Deep
-            </button>
-        </div>
-
-        <!-- 👤 USER -->
-        <div class="user-section">
-            <button id="user-info" onclick="handleUserClick()">
-                Login
-            </button>
+        <!-- Bottom buttons -->
+        <div class="sidebar-footer">
+            <button class="danger-btn" onclick="deleteLast()">🗑 Delete Last</button>
+            <button class="danger-btn" onclick="deleteAll()">⚠ Delete All</button>
         </div>
 
     </div>
 
-    <!-- 💬 CHAT BOX -->
-    <div id="chat-box" class="chat-box"></div>
+    <!-- ===== MAIN ===== -->
+    <div class="main">
 
-    <!-- ========================== -->
-    <!-- ✍️ INPUT AREA (FIXED) -->
-    <!-- ========================== -->
-    <div class="input-area">
+        <!-- ===== TOP BAR ===== -->
+        <div class="top-bar">
 
-        <input type="file" id="fileInput" hidden />
+            <div class="mode-group">
+                <button id="normal-btn" class="mode-btn active" onclick="setMode('normal')">🔎 Normal</button>
+                <button id="deep-btn" class="mode-btn" onclick="setMode('deep')">🧠 Deep</button>
+            </div>
 
-        <button class="icon-btn" onclick="document.getElementById('fileInput').click()">📁</button>
+            <div class="user-menu" onclick="toggleDropdown()">
 
-        <input type="text" id="message" placeholder="Type your message..." />
+            <div class="avatar">👤</div>
+            <span id="user-info">Login</span>
 
-        <button id="speaker-btn" class="icon-btn" onclick="toggleSpeaker()">🔇</button>
+            <!-- DROPDOWN -->
+            <div id="dropdown" class="dropdown hidden">
+                <div onclick="logoutAndSwitch()">🔄 Switch Account</div>
+                <div onclick="logoutAndSwitch()">🚪 Logout</div>
+            </div>
 
-        <button class="send-btn" onclick="sendMessage()">➤</button>
+</div>
+
+        </div>
+
+        <!-- ===== CHAT ===== -->
+        <div id="chat-box" class="chat-box"></div>
+
+        <!-- ===== INPUT ===== -->
+        <div class="input-area">
+
+            <input type="file" id="fileInput" hidden />
+
+            <button class="icon-btn" onclick="document.getElementById('fileInput').click()">📁</button>
+
+            <input type="text" id="message" placeholder="Type your message..." />
+
+            <button id="speaker-btn" class="icon-btn" onclick="toggleSpeaker()">🔇</button>
+
+            <button class="send-btn" onclick="sendMessage()">➤</button>
+
+        </div>
 
     </div>
 
 </div>
 
-</div>
-
-<!-- Scripts -->
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="/static/js/auth.js"></script>
 <script src="/static/js/chat.js"></script>

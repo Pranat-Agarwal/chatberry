@@ -270,6 +270,20 @@ document.getElementById("fileInput").addEventListener("change", async function (
     }
 });
 
+function toggleUserMenu() {
+    const menu = document.getElementById("dropdown");
+    menu.classList.toggle("hidden");
+}
+
+document.addEventListener("click", function (e) {
+    const menu = document.querySelector(".user-menu");
+    const dropdown = document.getElementById("dropdown");
+
+    if (!menu.contains(e.target)) {
+        dropdown.classList.add("hidden");
+    }
+});
+
 // ==========================
 // INIT
 // ==========================

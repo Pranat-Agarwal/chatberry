@@ -1,75 +1,107 @@
-/* ================= APP LAYOUT ================= */
+/* ===== GLOBAL ===== */
+body {
+    margin: 0;
+    font-family: "Segoe UI", sans-serif;
+    background: #0f1117;
+    color: white;
+}
+
+/* ===== LAYOUT ===== */
 .app {
     display: flex;
     height: 100vh;
 }
 
-/* ================= SIDEBAR ================= */
+/* ===== SIDEBAR ===== */
 .sidebar {
-    width: 220px;
-    background: #2d2f3a;
-    color: white;
-    padding: 10px;
+    width: 240px;
+    background: #171923;
+
+    display: flex;
+    flex-direction: column;
+    padding: 15px 10px 0 10px;
 }
 
-.sidebar button {
+/* New Chat */
+.new-chat-btn {
     width: 100%;
-    margin-bottom: 10px;
-    padding: 8px;
+    padding: 12px;
+    border-radius: 10px;
     border: none;
-    background: #1dbf73;
+    background: linear-gradient(135deg, #1dbf73, #00d4ff);
     color: white;
     cursor: pointer;
+    font-size: 14px;
 }
 
+/* History */
 .history {
-    margin-top: 10px;
+    flex: 1;
+    overflow-y: auto;
+    margin-top: 15px;
 }
 
-.sidebar-actions button {
-    background: #444;
+/* ===== BOTTOM BUTTONS ===== */
+.sidebar-footer {
+    margin-top: auto;
 }
 
-/* ================= MAIN ================= */
+.danger-btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    background: rgba(255,255,255,0.05);
+    color: #ff6b6b;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.danger-btn:hover {
+    background: rgba(255,255,255,0.1);
+}
+
+.danger-btn:last-child {
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+/* ===== MAIN ===== */
 .main {
     flex: 1;
     display: flex;
     flex-direction: column;
-    background: #1f2128;
-    color: white;
 }
 
-/* ================= TOP BAR ================= */
+/* ===== TOP BAR ===== */
 .top-bar {
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    padding: 10px;
-    border-bottom: 1px solid #333;
+    align-items: center;
+    padding: 12px 20px;
+
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(10px);
 }
 
+/* Mode buttons */
 .mode-group {
     display: flex;
     gap: 10px;
 }
 
 .mode-btn {
-    padding: 6px 12px;
-    border: none;
+    padding: 8px 16px;
     border-radius: 20px;
-    background: #2d2f3a;
+    border: none;
+    background: #222;
     color: white;
     cursor: pointer;
 }
 
 .mode-btn.active {
-    background: #1dbf73;
+    background: linear-gradient(135deg, #1dbf73, #00d4ff);
 }
 
-.user-section {
-    margin-left: auto;
-}
-
+/* User button */
 #user-info {
     padding: 6px 14px;
     border-radius: 20px;
@@ -79,44 +111,97 @@
     cursor: pointer;
 }
 
-/* ================= CHAT BOX ================= */
+/* ===== CHAT ===== */
 .chat-box {
     flex: 1;
-    padding: 15px;
+    padding: 20px;
     overflow-y: auto;
 }
 
-/* ================= INPUT AREA ================= */
+/* ===== INPUT AREA ===== */
 .input-area {
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 10px;
-    border-top: 1px solid #333;
+
+    padding: 14px 20px;
+    background: #171923;
 }
 
+/* Input */
 .input-area input {
     flex: 1;
-    padding: 10px;
-    border-radius: 20px;
+    padding: 14px 18px;
+    border-radius: 30px;
     border: none;
     outline: none;
+    background: #222;
+    color: white;
+    font-size: 14px;
 }
 
+/* Icons */
 .icon-btn {
-    padding: 8px 10px;
-    border: none;
-    border-radius: 10px;
     background: #2d2f3a;
-    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 50%;
     cursor: pointer;
 }
 
+/* Send */
 .send-btn {
-    padding: 10px 16px;
-    border-radius: 20px;
+    background: linear-gradient(135deg, #1dbf73, #00d4ff);
     border: none;
-    background: #1dbf73;
-    color: white;
+    padding: 12px 16px;
+    border-radius: 50%;
     cursor: pointer;
+}
+/* USER MENU */
+.user-menu {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    position: relative;
+}
+
+/* Avatar */
+.avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #2d2f3a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Dropdown */
+.dropdown {
+    position: absolute;
+    top: 45px;
+    right: 0;
+    background: #1f2128;
+    border-radius: 10px;
+    padding: 8px;
+    min-width: 160px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    z-index: 100;
+}
+
+/* Items */
+.dropdown div {
+    padding: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.dropdown div:hover {
+    background: #2d2f3a;
+}
+
+/* Hide */
+.hidden {
+    display: none;
 }
