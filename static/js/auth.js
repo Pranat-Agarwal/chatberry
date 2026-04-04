@@ -92,3 +92,19 @@ async function handleCredentialResponse(response) {
         console.error(err);
     }
 }
+
+function showChat() {
+    const auth = document.getElementById("auth-section");
+    const chat = document.getElementById("chat-section");
+
+    if (auth) auth.style.display = "none";
+    if (chat) chat.style.display = "block";
+}
+
+function showAuth() {
+    const auth = document.getElementById("auth-section");
+    const chat = document.getElementById("chat-section");
+
+    if (auth) auth.style.display = "block";
+    if (chat) chat.style.display = "none";
+}

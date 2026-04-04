@@ -273,7 +273,20 @@ document.getElementById("fileInput").addEventListener("change", async function (
 // ==========================
 function toggleDropdown(e) {
     e.stopPropagation();
-    document.getElementById("dropdown").classList.toggle("hidden");
+    const token = localStorage.getItem("token");
+
+    // 🔥 If NOT logged in → open Google login
+    if (!token) {
+        if (window.google) {
+            google.accounts.id.prompt();
+        } else {
+            alert("Google not loaded");
+        }
+        return;
+    }
+    document.addEventListener("click", function () {
+        document.getElementById("dropdown").classList.add("hidden");
+});
 }
 
 document.addEventListener("click", function () {
