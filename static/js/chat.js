@@ -6,13 +6,12 @@ window.onload = function () {
 
     if (token) {
         showChat();
+        loadHistory();
     } else {
         showAuth();
-        google.accounts.id.disableAutoSelect();
     }
 
     updateUserUI();
-    loadHistory();
     setTimeout(initGoogle, 500);
 };
 
@@ -30,14 +29,17 @@ const historyDiv = document.getElementById("history");
 // ==========================
 function updateUserUI() {
     const userBtn = document.getElementById("user-info");
+    const googleBtn = document.getElementById("google-btn");
 
     const token = localStorage.getItem("token");
     const name = localStorage.getItem("user_name");
 
     if (token && name) {
         userBtn.innerText = name;
+        if (googleBtn) googleBtn.style.display = "none";
     } else {
         userBtn.innerText = "Login";
+        if (googleBtn) googleBtn.style.display = "block";
     }
 }
 
@@ -95,9 +97,12 @@ async function autoSpeak(text) {
 // LOAD HISTORY
 // ==========================
 async function loadHistory() {
+    const token = getToken();
+    if (!token) return;
+
     const res = await fetch("/chat/history", {
         headers: {
-            "Authorization": "Bearer " + getToken()
+            "Authorization": "Bearer " + token
         }
     });
 
@@ -118,8 +123,6 @@ async function loadHistory() {
     });
 }
 
-// ==========================
-// LOAD CHAT
 // ==========================
 async function loadChat(id) {
     if (!id || id === "null") return;
@@ -148,8 +151,6 @@ function newChat() {
 }
 
 // ==========================
-// DELETE
-// ==========================
 async function deleteAll() {
     await fetch("/chat/delete-all", {
         method: "DELETE",
@@ -174,8 +175,6 @@ async function deleteLast() {
     loadHistory();
 }
 
-// ==========================
-// ADD MESSAGE
 // ==========================
 function addMessage(text, sender) {
     const div = document.createElement("div");
@@ -202,8 +201,6 @@ function setMode(mode) {
         .classList.add("active");
 }
 
-// ==========================
-// SEND MESSAGE
 // ==========================
 async function sendMessage() {
     const input = document.getElementById("message");
@@ -270,7 +267,7 @@ document.getElementById("fileInput").addEventListener("change", async function (
 });
 
 // ==========================
-// DROPDOWN (FINAL FIX)
+// DROPDOWN
 // ==========================
 function toggleDropdown(e) {
     e.stopPropagation();

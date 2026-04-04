@@ -12,66 +12,11 @@ function initGoogle() {
 }
 
 // ==========================
-// 🔵 HANDLE LOGIN CLICK
-// ==========================
-function handleUserClick() {
-    const token = localStorage.getItem("token");
-
-    if (!window.google) {
-        alert("Google not loaded");
-        return;
-    }
-
-    if (!token) {
-        google.accounts.id.prompt();
-    } else {
-        logoutAndSwitch();
-    }
-}
-
-// ==========================
-// 🔄 LOGOUT + SWITCH
-// ==========================
-function logoutAndSwitch() {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user_name");
-
-    google.accounts.id.disableAutoSelect();
-
-    session_id = null;
-
-    const chatBox = document.getElementById("chat-box");
-    if (chatBox) chatBox.innerHTML = "";
-
-    updateUserUI();
-    showAuth();   // ✅ IMPORTANT
-
-
-    setTimeout(() => {
-        google.accounts.id.prompt();
-    }, 300);
-}
-
-// ==========================
-// 🚪 LOGOUT ONLY
-// ==========================
-function logoutOnly() {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user_name");
-
-    google.accounts.id.disableAutoSelect();
-
-    updateUserUI();
-    showAuth();
-}
-
-// ==========================
 // 🔵 HANDLE RESPONSE
 // ==========================
 async function handleCredentialResponse(response) {
     try {
         const decoded = JSON.parse(atob(response.credential.split('.')[1]));
-        const googleName = decoded.name;
 
         const res = await fetch("/auth/google", {
             method: "POST",
@@ -83,14 +28,12 @@ async function handleCredentialResponse(response) {
 
         if (data.token) {
             localStorage.setItem("token", data.token);
-
-            const name = data.user?.name || googleName;
-
-            if (name) {
-                localStorage.setItem("user_name", name);
-            }
+            localStorage.setItem("user_name", data.user?.name || decoded.name);
+            localStorage.setItem("user_pic", decoded.picture || "");
 
             updateUserUI();
+            showChat();
+            loadHistory();
         }
 
     } catch (err) {
@@ -98,18 +41,68 @@ async function handleCredentialResponse(response) {
     }
 }
 
-function showChat() {
-    const auth = document.getElementById("auth-section");
-    const chat = document.getElementById("chat-section");
+// ==========================
+// 🚪 LOGOUT
+// ==========================
+function logout() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user_name");
+    localStorage.removeItem("user_pic");
 
-    if (auth) auth.style.display = "none";
-    if (chat) chat.style.display = "block";
+    google.accounts.id.disableAutoSelect();
+
+    resetChat();
+
+    updateUserUI();
+    showAuth();
+}
+
+// ==========================
+// 🔄 SWITCH ACCOUNT
+// ==========================
+function switchAccount() {
+    logout();
+
+    // force account selection
+    google.accounts.id.prompt();
+}
+
+// ==========================
+// HELPERS
+// ==========================
+function resetChat() {
+    session_id = null;
+
+    const chatBox = document.getElementById("chat-box");
+    if (chatBox) chatBox.innerHTML = "";
+
+    const historyDiv = document.getElementById("history");
+    if (historyDiv) historyDiv.innerHTML = "";
+}
+
+function handleLoginClick() {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+        toggleDropdown(event);
+        return;
+    }
+
+    if (!window.google) {
+        alert("Google not loaded");
+        return;
+    }
+
+    // Trigger login popup (user action → allowed)
+    google.accounts.id.prompt();
+}
+
+function showChat() {
+    document.getElementById("auth-section").style.display = "none";
+    document.getElementById("chat-section").style.display = "block";
 }
 
 function showAuth() {
-    const auth = document.getElementById("auth-section");
-    const chat = document.getElementById("chat-section");
-
-    if (auth) auth.style.display = "block";
-    if (chat) chat.style.display = "none";
+    document.getElementById("auth-section").style.display = "block";
+    document.getElementById("chat-section").style.display = "none";
 }
