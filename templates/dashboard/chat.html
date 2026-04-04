@@ -31,6 +31,7 @@
             <div class="mode-group">
                 <button id="normal-btn" class="mode-btn active" onclick="setMode('normal')">🔎 Normal</button>
                 <button id="deep-btn" class="mode-btn" onclick="setMode('deep')">🧠 Deep</button>
+                <button class="mode-btn" onclick="toggleSideChat()">🪟 Side Chat</button>
             </div>
 
             <!-- ===== USER MENU ===== -->
@@ -49,8 +50,29 @@
 
         </div>
 
-        <!-- ===== CHAT ===== -->
-        <div id="chat-box" class="chat-box"></div>
+        <!-- ===== MAIN CHAT ===== -->
+        <div id="main-chat" class="chat-box"></div>
+
+        <!-- ===== SIDE CHAT ===== -->
+        <div id="chat-container" class="chat-container hidden">
+
+            <!-- Window 1 -->
+            <div class="chat-panel" id="panel-1">
+                <div class="panel-header">
+                    Window 1 <span onclick="closePanel(1)">❌</span>
+                </div>
+                <div class="chat-box" id="chat-box-1"></div>
+            </div>
+
+            <!-- Window 2 -->
+            <div class="chat-panel" id="panel-2">
+                <div class="panel-header">
+                    Window 2 <span onclick="closePanel(2)">❌</span>
+                </div>
+                <div class="chat-box" id="chat-box-2"></div>
+            </div>
+
+        </div>
 
         <!-- ===== INPUT ===== -->
         <div class="input-area">
