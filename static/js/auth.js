@@ -5,9 +5,9 @@ function initGoogle() {
     if (!window.google) return;
 
     google.accounts.id.initialize({
-        client_id: "YOUR_CLIENT_ID",
+        client_id: "950880637924-2pgj63ev1hgb635s1imnjjvon9tto8n0.apps.googleusercontent.com",
         callback: handleCredentialResponse,
-        auto_select: false
+        auto_select: true
     });
 }
 
@@ -63,8 +63,11 @@ function logout() {
 function switchAccount() {
     logout();
 
-    // force account selection
-    google.accounts.id.prompt();
+    google.accounts.id.prompt((n) => {
+        if (n.isSkippedMoment()) {
+            console.log("Retry login");
+        }
+    });
 }
 
 // ==========================
