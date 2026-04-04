@@ -6,7 +6,8 @@ function initGoogle() {
 
     google.accounts.id.initialize({
         client_id: "YOUR_CLIENT_ID",
-        callback: handleCredentialResponse
+        callback: handleCredentialResponse,
+        auto_select: false
     });
 }
 
@@ -37,7 +38,14 @@ function logoutAndSwitch() {
 
     google.accounts.id.disableAutoSelect();
 
+    session_id = null;
+
+    const chatBox = document.getElementById("chat-box");
+    if (chatBox) chatBox.innerHTML = "";
+
     updateUserUI();
+    showAuth();   // ✅ IMPORTANT
+
 
     setTimeout(() => {
         google.accounts.id.prompt();
@@ -54,6 +62,7 @@ function logoutOnly() {
     google.accounts.id.disableAutoSelect();
 
     updateUserUI();
+    showAuth();
 }
 
 // ==========================

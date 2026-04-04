@@ -8,6 +8,7 @@ window.onload = function () {
         showChat();
     } else {
         showAuth();
+        google.accounts.id.disableAutoSelect();
     }
 
     updateUserUI();
