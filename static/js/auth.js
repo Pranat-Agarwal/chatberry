@@ -98,11 +98,7 @@ function handleLoginClick() {
 }
 
 function showChat() {
-    document.getElementById("auth-section").style.display = "none";
-    document.getElementById("chat-section").style.display = "block";
 }
 
 function showAuth() {
-    document.getElementById("auth-section").style.display = "block";
-    document.getElementById("chat-section").style.display = "none";
 }
