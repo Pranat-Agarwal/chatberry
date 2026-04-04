@@ -37,10 +37,6 @@ function logoutAndSwitch() {
 
     google.accounts.id.disableAutoSelect();
 
-    google.accounts.id.revoke("", () => {
-        console.log("Revoked");
-    });
-
     updateUserUI();
 
     setTimeout(() => {
