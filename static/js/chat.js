@@ -141,8 +141,6 @@ async function loadChat(id) {
 }
 
 // ==========================
-// NEW CHAT
-// ==========================
 function newChat() {
     session_id = null;
     chatBox.innerHTML = "";
@@ -270,21 +268,14 @@ document.getElementById("fileInput").addEventListener("change", async function (
     }
 });
 
-function toggleUserMenu() {
-    const menu = document.getElementById("dropdown");
-    menu.classList.toggle("hidden");
+// ==========================
+// DROPDOWN (FINAL FIX)
+// ==========================
+function toggleDropdown(e) {
+    e.stopPropagation();
+    document.getElementById("dropdown").classList.toggle("hidden");
 }
 
-document.addEventListener("click", function (e) {
-    const menu = document.querySelector(".user-menu");
-    const dropdown = document.getElementById("dropdown");
-
-    if (!menu.contains(e.target)) {
-        dropdown.classList.add("hidden");
-    }
+document.addEventListener("click", function () {
+    document.getElementById("dropdown").classList.add("hidden");
 });
-
-// ==========================
-// INIT
-// ==========================
-loadHistory();
