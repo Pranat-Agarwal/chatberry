@@ -2,8 +2,8 @@
 body {
     margin: 0;
     font-family: "Segoe UI", sans-serif;
-    background: #0f1117;
-    color: white;
+    background: linear-gradient(135deg, #0b0f1a, #0f1117, #121826);
+    color: #e6e6e6;
 }
 
 /* ===== LAYOUT ===== */
@@ -15,7 +15,8 @@ body {
 /* ===== SIDEBAR ===== */
 .sidebar {
     width: 240px;
-    background: #171923;
+    background: linear-gradient(180deg, #12141c, #0f1117);
+    border-right: 1px solid rgba(255,255,255,0.05);
 
     display: flex;
     flex-direction: column;
@@ -26,12 +27,19 @@ body {
 .new-chat-btn {
     width: 100%;
     padding: 12px;
-    border-radius: 10px;
+    border-radius: 12px;
     border: none;
-    background: linear-gradient(135deg, #1dbf73, #00d4ff);
+    background: linear-gradient(135deg, #00c6ff, #0072ff);
     color: white;
     cursor: pointer;
     font-size: 14px;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+.new-chat-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,114,255,0.4);
 }
 
 /* History */
@@ -50,18 +58,15 @@ body {
     width: 100%;
     padding: 12px;
     border: none;
-    background: rgba(255,255,255,0.05);
+    background: rgba(255,255,255,0.04);
     color: #ff6b6b;
     cursor: pointer;
     font-size: 14px;
+    transition: 0.2s;
 }
 
 .danger-btn:hover {
-    background: rgba(255,255,255,0.1);
-}
-
-.danger-btn:last-child {
-    border-top: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.08);
 }
 
 /* ===== MAIN ===== */
@@ -78,8 +83,9 @@ body {
     align-items: center;
     padding: 12px 20px;
 
-    background: rgba(255,255,255,0.05);
-    backdrop-filter: blur(10px);
+    background: rgba(255,255,255,0.03);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
 }
 
 /* Mode buttons */
@@ -92,13 +98,19 @@ body {
     padding: 8px 16px;
     border-radius: 20px;
     border: none;
-    background: #222;
-    color: white;
+    background: #1e2230;
+    color: #cfcfcf;
     cursor: pointer;
+    transition: 0.2s;
+}
+
+.mode-btn:hover {
+    background: #2a2f40;
 }
 
 .mode-btn.active {
-    background: linear-gradient(135deg, #1dbf73, #00d4ff);
+    background: linear-gradient(135deg, #00c6ff, #0072ff);
+    color: white;
 }
 
 /* User button */
@@ -106,7 +118,7 @@ body {
     padding: 6px 14px;
     border-radius: 20px;
     border: none;
-    background: #2d2f3a;
+    background: #1e2230;
     color: white;
     cursor: pointer;
 }
@@ -114,8 +126,39 @@ body {
 /* ===== CHAT ===== */
 .chat-box {
     flex: 1;
-    padding: 20px;
+    padding: 25px;
     overflow-y: auto;
+}
+
+/* ===== CHAT MESSAGES ===== */
+.message {
+    max-width: 60%;
+    padding: 14px 18px;
+    margin: 10px 0;
+    border-radius: 16px;
+    line-height: 1.5;
+    word-wrap: break-word;
+
+    box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+    transition: 0.2s;
+}
+
+/* USER (RIGHT SIDE) */
+.message.user {
+    margin-left: auto;
+    background: #2f3342;   /* premium grey */
+    color: #f5f5f5;
+    text-align: right;
+    border-bottom-right-radius: 6px;
+}
+
+/* BOT (LEFT SIDE) */
+.message.bot {
+    margin-right: auto;
+    background: #ffffff;
+    color: #111;
+    text-align: left;
+    border-bottom-left-radius: 6px;
 }
 
 /* ===== INPUT AREA ===== */
@@ -125,7 +168,8 @@ body {
     gap: 10px;
 
     padding: 14px 20px;
-    background: #171923;
+    background: rgba(20,22,30,0.9);
+    border-top: 1px solid rgba(255,255,255,0.05);
 }
 
 /* Input */
@@ -135,29 +179,40 @@ body {
     border-radius: 30px;
     border: none;
     outline: none;
-    background: #222;
+    background: #1e2230;
     color: white;
     font-size: 14px;
 }
 
 /* Icons */
 .icon-btn {
-    background: #2d2f3a;
+    background: #1e2230;
     border: none;
     padding: 12px;
     border-radius: 50%;
     cursor: pointer;
+    transition: 0.2s;
+}
+
+.icon-btn:hover {
+    background: #2a2f40;
 }
 
 /* Send */
 .send-btn {
-    background: linear-gradient(135deg, #1dbf73, #00d4ff);
+    background: linear-gradient(135deg, #00c6ff, #0072ff);
     border: none;
     padding: 12px 16px;
     border-radius: 50%;
     cursor: pointer;
+    transition: 0.2s;
 }
-/* USER MENU */
+
+.send-btn:hover {
+    transform: scale(1.05);
+}
+
+/* ===== USER MENU ===== */
 .user-menu {
     display: flex;
     align-items: center;
@@ -171,7 +226,7 @@ body {
     width: 32px;
     height: 32px;
     border-radius: 50%;
-    background: #2d2f3a;
+    background: #1e2230;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -182,11 +237,11 @@ body {
     position: absolute;
     top: 45px;
     right: 0;
-    background: #1f2128;
+    background: #1c1f2b;
     border-radius: 10px;
     padding: 8px;
     min-width: 160px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    box-shadow: 0 0 15px rgba(0,0,0,0.6);
     z-index: 100;
 }
 
@@ -198,14 +253,10 @@ body {
 }
 
 .dropdown div:hover {
-    background: #2d2f3a;
+    background: #2a2f40;
 }
 
-/* Hide */
-.hidden {
-    display: none;
-}
-
+/* ===== SIDE CHAT ===== */
 .chat-container {
     display: flex;
     height: 100%;
@@ -215,9 +266,10 @@ body {
     flex: 1;
     display: flex;
     flex-direction: column;
-    border-right: 1px solid #333;
+    border-right: 1px solid rgba(255,255,255,0.05);
 }
 
+/* Hide */
 .hidden {
     display: none;
 }

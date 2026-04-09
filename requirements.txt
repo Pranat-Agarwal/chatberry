@@ -12,3 +12,8 @@ gtts
 pyttsx3
 secure-smtplib
 google-auth
+python-docx 
+openpyxl
+sentence-transformers 
+matplotlib
+pandas

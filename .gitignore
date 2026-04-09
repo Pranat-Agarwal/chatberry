@@ -28,3 +28,32 @@ build/
 
 # Misc
 *.sqlite3
+
+# ==========================
+# TEST FILES
+# ==========================
+test.py
+*/test.py
+test_*.py
+
+# ==========================
+# METRIC / EVALUATION FILES
+# ==========================
+metric_cal.py
+
+# ==========================
+# DATASETS (HEAVY FILES)
+# ==========================
+dataset/
+
+# ==========================
+# OUTPUT FILES (RESULTS)
+# ==========================
+output/
+uploads/output/
+
+# ==========================
+# TEST FILES INSIDE UPLOADS
+# ==========================
+uploads/test.py
+uploads/test*
