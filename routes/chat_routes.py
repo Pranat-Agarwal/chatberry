@@ -10,6 +10,7 @@ from services.chat_service import generate_chat_response, should_use_search
 from config.tavily_client import tavily_client
 
 from services.context_service import enhance_query_with_context
+from services.memory_service import MemoryService
 
 import uuid
 import time
