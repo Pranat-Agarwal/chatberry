@@ -324,13 +324,7 @@ def get_chat_history():
 
         if not user_id:
             return jsonify({
-                "chats": [
-                    {
-                        "session_id": sid,
-                        "title": "Guest Chat"
-                    }
-                    for sid in GUEST_HISTORY.keys()
-                ]
+                "chats": []
             }), 200
 
         chats = ChatModel.get_user_chats(user_id)
