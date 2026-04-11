@@ -46,6 +46,7 @@ function updateUserUI() {
 // SIDE CHAT TOGGLE
 // ==========================
 function toggleSideChat() {
+    activePanel = 1;
     const container = document.getElementById("chat-container");
     const main = document.getElementById("main-chat");
 
@@ -76,18 +77,33 @@ function copyMainToPanels() {
 // ==========================
 // ACTIVE PANEL
 // ==========================
-document.addEventListener("click", function (e) {
-    if (e.target.closest("#panel-1")) activePanel = 1;
-    if (e.target.closest("#panel-2")) activePanel = 2;
+document.getElementById("panel-1").addEventListener("click", () => {
+    activePanel = 1;
+    console.log("Switched to Panel 1");
+});
+
+document.getElementById("panel-2").addEventListener("click", () => {
+    activePanel = 2;
+    console.log("Switched to Panel 2");
 });
 
 // ==========================
 // ADD MESSAGE
 // ==========================
 function addMessage(text, sender) {
-    let box = isSideChat
-        ? document.getElementById(`chat-box-${activePanel}`)
-        : document.getElementById("main-chat");
+    let box;
+
+    if (isSideChat) {
+        if (activePanel === 1) {
+            box = document.getElementById("chat-box-1");
+        } else if (activePanel === 2) {
+            box = document.getElementById("chat-box-2");
+        } else {
+            box = document.getElementById("chat-box-1");
+        }
+    } else {
+        box = document.getElementById("main-chat");
+    }
 
     if (!box) return;
 

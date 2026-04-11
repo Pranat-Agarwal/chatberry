@@ -1,5 +1,5 @@
 import re
-
+import time
 
 # ==========================
 # 🧠 DETECT QUERY TYPE
@@ -92,10 +92,48 @@ def extract_keywords(text):
     words = text.lower().split()
 
     stopwords = {
-        "the", "is", "in", "at", "on", "and",
-        "a", "to", "of", "for", "with"
-    }
+    "the","is","in","at","on","and","a","to","of","for","with",
+    "what","tell","me","about","give","show","explain",
+    "please","can","you"
+}
 
     keywords = [word for word in words if word not in stopwords]
 
     return keywords[:5]  # limit
+
+# ==========================
+# 🧠 CONTEXT MANAGER
+# ==========================
+class ContextManager:
+    def __init__(self):
+        self.last_topic = None
+        self.last_updated = 0
+
+    def update(self, keywords):
+        if keywords:
+            self.last_topic = keywords[0]
+            self.last_updated = time.time()
+
+    def get(self):
+        if time.time() - self.last_updated < 60:  # 60 sec memory
+            return self.last_topic
+        return None
+
+
+context_manager = ContextManager()
+
+def enhance_query_with_context(query):
+    keywords = extract_keywords(query)
+    context = context_manager.get()
+
+    # short query → use previous topic
+    if len(keywords) <= 2 and context:
+        enhanced = context + " " + query
+        print("🧠 CONTEXT APPLIED:", enhanced)
+        return enhanced
+
+    # update topic
+    if keywords:
+        context_manager.update(keywords)
+
+    return query
