@@ -196,13 +196,12 @@ async function sendMessage() {
 // ==========================
 async function loadHistory() {
     const token = getToken();
-    if (!token) return;
 
-    const res = await fetch("/chat/history", {
-        headers: {
-            "Authorization": "Bearer " + token
-        }
-    });
+    const headers = token
+        ? { "Authorization": "Bearer " + token }
+        : {};
+
+    const res = await fetch("/chat/history", { headers });
 
     const data = await res.json();
 

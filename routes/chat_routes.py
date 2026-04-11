@@ -19,6 +19,10 @@ chat_bp = Blueprint("chat", __name__)
 CACHE = {}
 CACHE_TTL = 300  # 5 min
 
+# ==========================
+# 🧠 GUEST HISTORY
+# ==========================
+GUEST_HISTORY = {}
 
 def get_cache(q):
     item = CACHE.get(q)
@@ -54,9 +58,18 @@ def send_message():
 
         response = process_chat_logic(user_id, session_id, message, mode)
 
-        # 💾 Save only if logged-in
+        # 💾 SAVE RESPONSE
+        # ==========================
         if user_id:
             ChatModel.add_message(user_id, session_id, "assistant", response)
+        else:
+            if session_id not in GUEST_HISTORY:
+                GUEST_HISTORY[session_id] = []
+
+            GUEST_HISTORY[session_id].append({
+                "role": "assistant",
+                "content": response
+            })
 
         return jsonify({
             "session_id": session_id,
@@ -89,7 +102,7 @@ def handle_user_entry(request):
     print("🚨 USER_ID:", user_id)
 
     # ==========================
-    # 👤 USER FLOW (ONLY IF LOGGED IN)
+    # 👤 USER FLOW
     # ==========================
     if user_id:
         existing_chat = ChatModel.get_chat_by_session(user_id, session_id)
@@ -101,6 +114,18 @@ def handle_user_entry(request):
         ProfileModel.update_query_type(user_id, query_type)
 
         ChatModel.add_message(user_id, session_id, "user", message)
+
+    # ==========================
+    # 👤 GUEST FLOW (NEW)
+    # ==========================
+    else:
+        if session_id not in GUEST_HISTORY:
+            GUEST_HISTORY[session_id] = []
+
+        GUEST_HISTORY[session_id].append({
+            "role": "user",
+            "content": message
+        })
 
     return user_id, session_id, message, mode, None
 
@@ -298,7 +323,15 @@ def get_chat_history():
         user_id = request.user.get("id")
 
         if not user_id:
-            return jsonify({"chats": []}), 200  # 👤 guest
+            return jsonify({
+                "chats": [
+                    {
+                        "session_id": sid,
+                        "title": "Guest Chat"
+                    }
+                    for sid in GUEST_HISTORY.keys()
+                ]
+            }), 200
 
         chats = ChatModel.get_user_chats(user_id)
 
@@ -326,7 +359,9 @@ def get_single_chat(session_id):
         user_id = request.user.get("id")
 
         if not user_id:
-            return jsonify({"messages": []}), 200  # 👤 guest
+            return jsonify({
+                "messages": GUEST_HISTORY.get(session_id, [])
+            }), 200
 
         if not session_id or session_id == "null":
             return jsonify({"messages": []}), 200
