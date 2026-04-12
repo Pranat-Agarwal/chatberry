@@ -166,7 +166,10 @@ def process_chat_logic(user_id, session_id, message, mode):
         ])
 
         # get saved style
-        saved_style = MemoryService.get_memory(user_id, "response_style") if user_id else None
+        saved_style = None
+        if user_id:
+            memory = MemoryService.get_memory(user_id)
+            saved_style = memory.get("response_style")
 
 
         if not has_style:

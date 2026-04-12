@@ -33,7 +33,8 @@ def generate_chat_response(user_id, session_id, user_message, query_type):
         # ==========================
         saved_style = None
         if user_id:
-            saved_style = MemoryService.get_memory(user_id, "response_style")
+            memory = MemoryService.get_memory(user_id)
+            saved_style = memory.get("response_style")
 
         # ==========================
         # 🧠 DETECT STYLE FROM QUERY
