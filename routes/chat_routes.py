@@ -49,10 +49,16 @@ def set_cache(q, data):
 @chat_bp.route("/send", methods=["POST"])
 @token_required
 def send_message():
+
+    print("\n=== 🚀 SEND MESSAGE DEBUG ===")    
+    print("REQUEST.USER:", getattr(request, "user", None))
     try:
         print("🚀 send_message CALLED")
 
         user_id, session_id, message, mode, error = handle_user_entry(request)
+        print("USER_ID:", user_id)
+        print("SESSION_ID:", session_id)
+        print("MESSAGE:", message)
 
         if error:
             return jsonify(error), 400
@@ -63,6 +69,7 @@ def send_message():
         # ==========================
         if user_id:
             ChatModel.add_message(user_id, session_id, "assistant", response)
+            print("💾 SAVING ASSISTANT MESSAGE TO DB")
         else:
             if session_id not in GUEST_HISTORY:
                 GUEST_HISTORY[session_id] = []
@@ -83,6 +90,9 @@ def send_message():
     
 
 def handle_user_entry(request):
+    print("\n--- 👤 HANDLE USER ENTRY ---")
+    print("USER_ID:", user_id)
+    print("SESSION_ID:", session_id)
     data = request.get_json()
 
     user = getattr(request, "user", None)
@@ -116,6 +126,12 @@ def handle_user_entry(request):
 
         ChatModel.add_message(user_id, session_id, "user", message)
 
+        print("🔍 CHECK EXISTING CHAT")
+        print("EXISTING:", existing_chat)
+
+        if not existing_chat:
+            print("🆕 CREATING NEW CHAT")
+
     # ==========================
     # 👤 GUEST FLOW (NEW)
     # ==========================
@@ -127,6 +143,8 @@ def handle_user_entry(request):
             "role": "user",
             "content": message
         })
+
+    print("💬 USER MESSAGE SAVED")
 
     return user_id, session_id, message, mode, None
 
@@ -331,7 +349,12 @@ def get_chat_history():
                 "chats": []
             }), 200
 
+        print("\n=== 📜 HISTORY API ===")
+        print("USER_ID:", user_id)
+
         chats = ChatModel.get_user_chats(user_id)
+
+        print("CHATS FOUND:", chats)
 
         return jsonify({
             "chats": [

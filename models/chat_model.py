@@ -32,6 +32,11 @@ class ChatModel:
 
         db.chats.insert_one(chat)
 
+        print("\n=== 🆕 CREATE CHAT ===")
+        print("USER_ID:", user_id)
+        print("SESSION_ID:", session_id)
+        print("TITLE:", make_title(first_message))
+
     # ==========================
     # 📂 GET CHAT
     # ==========================
@@ -72,6 +77,12 @@ class ChatModel:
             upsert=True
         )
 
+        print("\n=== 💬 ADD MESSAGE ===")
+        print("USER_ID:", user_id)
+        print("SESSION_ID:", session_id)
+        print("ROLE:", role)
+        print("CONTENT:", content[:50])
+
     # ==========================
     # 📜 GET ALL CHATS
     # ==========================
@@ -86,6 +97,8 @@ class ChatModel:
             db.chats.find({"user_id": user_id})
             .sort("updated_at", -1)
         )
+        print("\n=== 📜 GET USER CHATS ===")
+        print("USER_ID:", user_id)
 
     # ==========================
     # ❌ DELETE FIRST CHAT

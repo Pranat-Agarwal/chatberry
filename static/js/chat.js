@@ -136,6 +136,10 @@ async function sendMessage() {
     addMessage(message, "user");
     input.value = "";
 
+    console.log("📤 SENDING MESSAGE");
+    console.log("TOKEN:", getToken());
+    console.log("SESSION_ID:", session_id);
+
     // SIDE CHAT → TEMP ONLY
     if (isSideChat) {
         try {
@@ -189,6 +193,8 @@ async function sendMessage() {
         console.error(err);
         addMessage("❌ Server error", "bot");
     }
+
+    console.log("📥 RESPONSE:", data);
 }
 
 // ==========================
@@ -205,6 +211,8 @@ async function loadHistory() {
 
     const data = await res.json();
     console.log("📜 HISTORY:", data); // DEBUG
+    console.log("📜 LOADING HISTORY");
+    console.log("TOKEN:", getToken());
 
 
     const historyDiv = document.getElementById("history");
@@ -221,6 +229,8 @@ async function loadHistory() {
 
         historyDiv.appendChild(div);
     });
+
+    console.log("📜 HISTORY DATA:", data);
 }
 
 // ==========================
