@@ -9,6 +9,9 @@ window.onload = function () {
     }
 
     updateUserUI();
+    setTimeout(() => {
+        loadHistory();
+    }, 300);
     setTimeout(initGoogle, 500);
 };
 
