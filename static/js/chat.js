@@ -4,14 +4,11 @@
 window.onload = function () {
     const token = localStorage.getItem("token");
 
-    if (token) {
-        loadHistory();
-    }
-
     updateUserUI();
+
     setTimeout(() => {
         loadHistory();
-    }, 300);
+    }, 500);
     setTimeout(initGoogle, 500);
 };
 
@@ -207,6 +204,8 @@ async function loadHistory() {
     const res = await fetch("/chat/history", { headers });
 
     const data = await res.json();
+    console.log("📜 HISTORY:", data); // DEBUG
+
 
     const historyDiv = document.getElementById("history");
     historyDiv.innerHTML = "";

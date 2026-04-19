@@ -33,7 +33,9 @@ async function handleCredentialResponse(response) {
 
             updateUserUI();
             showChat();
-            loadHistory();
+            setTimeout(() => {
+                loadHistory();
+            }, 500);
         }
 
     } catch (err) {
